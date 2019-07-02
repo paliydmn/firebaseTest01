@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/png" href="image/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="image/favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="manifest" href="manifest.json">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="css/push.css">
+  <script defer src="js/push.js"></script>
+  <style>
+    div#menuIcon {
+      width: 30px;
+      height: 4px;
+      background-color: #aaa;
+      margin: 6px 0;
+    }
+
+    i.material-icons {
+      margin-top: 50%;
+    }
+  </style>
+  <title>Paliydmn</title>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="z-depth-0 grey lighten-4">
+    <div class="nav-wrapper container">
+      <a href="#" class="brand-logo">
+        <!-- <img src="img/logo.svg" style="width: 180px; margin-top: 10px;"> -->
+      </a>
+      <a href="#" data-target="slide-out" class="sidenav-trigger">
+        <i class="material-icons">
+          <!-- <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">
+       -->
+          <div id="menuIcon"></div>
+          <div id="menuIcon"></div>
+          <div id="menuIcon"></div>
+        </i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li class="logged-in" style="display: none;">
+          <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+        </li>
+        <li class="logged-in" style="display: none;">
+          <a href="#" class="grey-text" id="logout">Logout</a>
+        </li>
+        <li class="logged-in" style="display: none;">
+          <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
+        </li>
+        <li class="logged-out" style="display: none;">
+          <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
+        </li>
+        <li class="logged-out" style="display: none;">
+          <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+        </li>
+        </span>
+      </ul>
+    </div>
+  </nav>
+  <ul class="sidenav" id="slide-out">
+    <li class="logged-in" style="display: none;">
+      <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+    </li>
+    <li class="logged-in" style="display: none;">
+      <a href="#" class="grey-text" id="logout">Logout</a>
+    </li>
+    <li class="logged-in" style="display: none;">
+      <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
+    </li>
+    <li class="logged-out" style="display: none;">
+      <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
+    </li>
+    <li class="logged-out" style="display: none;">
+      <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+    </li>
+  </ul>
+
+  <!-- SIGN UP MODAL -->
+  <div id="modal-signup" class="modal">
+    <div class="modal-content">
+      <h4>Sign up</h4><br />
+      <form id="signup-form">
+        <div class="input-field">
+          <input type="email" id="signup-email" required />
+          <label for="signup-email">Email address</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="signup-password" required />
+          <label for="signup-password">Choose password</label>
+        </div>
+        <button class="btn yellow darken-2 z-depth-0">Sign up</button>
+      </form>
+    </div>
+  </div>
+  <!-- LOGIN MODAL -->
+  <div id="modal-login" class="modal">
+    <div class="modal-content">
+      <h4>Login</h4><br />
+      <form id="login-form">
+        <div class="input-field">
+          <input type="email" id="login-email" required />
+          <label for="login-email">Email address</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="login-password" required />
+          <label for="login-password">Your password</label>
+        </div>
+        <button class="btn yellow darken-2 z-depth-0">Login</button>
+      </form>
+    </div>
+  </div>
+  <!-- ACCOUNT MODAL -->
+  <div id="modal-account" class="modal">
+    <div class="modal-content center-align">
+      <h4>Account details</h4><br />
+      <div class="account-details"></div>
+      <div class="account-extras"></div>
+    </div>
+  </div>
+  <!-- CREATE GUIDE MODAL -->
+  <div id="modal-create" class="modal">
+    <div class="modal-content">
+      <h4>Create Guide</h4><br />
+      <form id="create-form">
+        <div class="input-field">
+          <input type="text" id="title" required>
+          <label for="title">Guide Title</label>
+        </div>
+        <div class="input-field">
+          <textarea id="content" class="materialize-textarea" required></textarea>
+          <label for="content">Guide Content</label>
+        </div>
+        <button class="btn yellow darken-2 z-depth-0">Create</button>
+      </form>
+    </div>
+  </div>
+  <!-- GUIDE LIST -->
+  <div class="container" style="margin-top: 40px;">
+    <ul class="collapsible z-depth-0 guides" style="border: none;">
+    </ul>
+    <!-- PUSH BLOCK-->
+    <div class="pushBlock" style="display: none;">
+      <h4>Send Push!</h4>
+      <div>Message To:
+        <div id="tokenList" class="tokenList">Token List</div>
+      </div>
+      <div>
+        <div>
+          <h4>Type a message:</h4>
+        </div>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="input_text" type="text" class="mTitle" data-length="10">
+                <label for="input_text">Input title</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="textarea" class="materialize-textarea mBody" data-length="120"></textarea>
+                <label for="textarea">Input message</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="textarea2" class="materialize-textarea mClickAction" data-length="120"></textarea>
+                <label for="textarea2">Click Action</label>
+              </div>
+            </div>
+            <button id="send" class="btn waves-effect waves-light" type="button" name="action">send
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+      <table id="statistic">
+        <tr>
+          <th>Sent</th>
+          <th>Success</th>
+          <th>failure</th>
+        </tr>
+        <tr>
+          <td id="sent">0</td>
+          <td id="success">0</td>
+          <td id="failure">0</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- init Firebase -->
+
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-messaging.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    // setup materialize components
+    console.log("***********Materialize init***********");
+    document.addEventListener('DOMContentLoaded', function () {
+      var modals = document.querySelectorAll('.modal');
+      M.Modal.init(modals);
+
+      var items = document.querySelectorAll('.collapsible');
+      M.Collapsible.init(items);
+
+      var elems = document.querySelector('.sidenav');
+      M.Sidenav.init(elems);
+    });
+  </script>
+  <script>
+    //Firebase init
+    const firebaseConfig = {
+      apiKey: "AIzaSyCi5DjGYz2vpQ-SXFjPad1WQZ_TS9DFn44",
+      authDomain: "paliytest01.firebaseapp.com",
+      databaseURL: "https://paliytest01.firebaseio.com",
+      projectId: "paliytest01",
+      storageBucket: "paliytest01.appspot.com",
+      messagingSenderId: "536837451368",
+      appId: "1:536837451368:web:7cedc530df66396e"
+    };
+    // Initialize Firebase
+    console.log(" start Initialize Firebase");
+    firebase.initializeApp(firebaseConfig);
+
+    // make auth and firestore references
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main_app.js"></script>
+
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      if (navigator.serviceWorker.controller) {
+        console.log("active service worker found, no need to register");
+      } else {
+        // Register the service worker
+        navigator.serviceWorker
+          .register("firebase-messaging-sw.js", {
+            scope: "./"
+          })
+          .then(function (reg) {
+            console.log("Service worker has been registered for scope: " + reg.scope);
+          });
+      }
+    }
+
+  </script>
+
+</body>
+
+</html>
