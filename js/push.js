@@ -53,13 +53,13 @@ function setupPush(data) {
 						}
 					}
 				});
-
 			});
 		}
 		showList();
 		let sentCount = 0;
 		let successCount = 0;
 		let failureCount = 0;
+
 
 		//Handle POST. send puches to users
 		var sendBtn = document.getElementById("send");
@@ -71,17 +71,24 @@ function setupPush(data) {
 				var action = document.querySelector(".mClickAction").value;
 
 				selectedArr.forEach(function (to) {
-					if(to.innerHTML == 'Select all'){
+					if (to.innerHTML == 'Select all') {
 						return;
 					}
+					var authKey = '';
+					dbRef = firebase.database().ref("key");
+					dbRef.once('value', snap => {
+						console.log(snap);
+						authKey = 'key=' + snap.val();
+					});
 					var xhr = new XMLHttpRequest();
+
 					xhr.open('POST', 'https://fcm.googleapis.com/fcm/send', true);
 					xhr.setRequestHeader('Content-type', 'application/json');
-					xhr.setRequestHeader('Authorization', 'key=AAAAfP4Bbmg:APA91bFLAzP_Hhk6BYAGPk2AoXTRthFI_oW5tWZsMaepy1mYIiP2gXpfXgaobBR_q6lNbQ3HiU6YWOXk-SpPJsRTK7kZ9pMKJHKPWAzq99UWvfTZhy9dwKR59nGs8DYKK6lroZE3UTs8');
+					xhr.setRequestHeader('Authorization', authKey);
 					xhr.onload = function () {
 						// do something to response
 						var result = JSON.parse(this.responseText).success;
-						//console.log("isSuccess : " + result);
+						console.log("Result: " + this.responseText);
 
 						document.getElementById("sent").textContent = ++sentCount;
 
