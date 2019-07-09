@@ -50,7 +50,7 @@
         <li class="logged-in" style="display: none;">
           <a href="#" class="grey-text" id="logout">Logout</a>
         </li>
-        <li class="logged-in" style="display: none;">
+        <li class="admin" style="display: none;">
           <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
         </li>
         <li class="logged-out" style="display: none;">
@@ -63,6 +63,43 @@
       </ul>
     </div>
   </nav>
+  <!-- ADMIN ACTIONS -->
+  <div class="center-align admin-actions admin"
+    style="margin: 40px auto; max-width: 300px; position:relative; display: none;">
+    <form>
+      <input type="email" placeholder="User email" id="admin-email" required />
+      <div class="preloader-wrapper small" style="
+          position: absolute; 
+          width: 25px;
+          height: 25px;
+          margin-top: 12px;
+          right: 10px;">
+        <div class="spinner-layer spinner-yellow">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-small waves-effect waves-teal green z-depth-0">Make admin</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <div id="makeAdmin" class="modal">
+      <div class="modal-content adminResult">
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close btn waves-effect waves-teal green">OK</a>
+      </div>
+    </div>
+  </div>
+
   <ul class="sidenav" id="slide-out">
     <li class="logged-in" style="display: none;">
       <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
@@ -70,7 +107,7 @@
     <li class="logged-in" style="display: none;">
       <a href="#" class="grey-text" id="logout">Logout</a>
     </li>
-    <li class="logged-in" style="display: none;">
+    <li class="admin" style="display: none;">
       <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
     </li>
     <li class="logged-out" style="display: none;">
@@ -145,7 +182,7 @@
     <ul class="collapsible z-depth-0 guides" style="border: none;">
     </ul>
     <!-- PUSH BLOCK-->
-    <div class="pushBlock" style="display: none;">
+    <div class="pushBlock admin" style="display: none;">
       <h4>Send Push!</h4>
       <div>Message To:
         <div id="tokenList" class="tokenList">Token List</div>
@@ -170,11 +207,12 @@
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="textarea2" class="materialize-textarea mClickAction" data-length="120" value="received.html"></textarea>
+                <textarea id="textarea2" class="materialize-textarea mClickAction" data-length="120"
+                  value="received.html"></textarea>
                 <label for="textarea2">Click Action</label>
               </div>
             </div>
-            <button id="send" class="btn waves-effect waves-light" type="button" name="action">send
+            <button id="send" class="btn waves-effect waves-teal green" type="button" name="action">send
               <i class="material-icons right">send</i>
             </button>
           </form>
@@ -193,7 +231,6 @@
         </tr>
       </table>
     </div>
-
   </div>
 
   <!-- init Firebase -->
@@ -203,11 +240,11 @@
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-functions.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
     // setup materialize components
-    console.log("***********Materialize init***********");
     document.addEventListener('DOMContentLoaded', function () {
       var modals = document.querySelectorAll('.modal');
       M.Modal.init(modals);
@@ -221,27 +258,27 @@
   </script>
   <script>
     //Firebase init
-    const firebaseConfig = {
-      apiKey: "AIzaSyCi5DjGYz2vpQ-SXFjPad1WQZ_TS9DFn44",
-      authDomain: "paliytest01.firebaseapp.com",
-      databaseURL: "https://paliytest01.firebaseio.com",
-      projectId: "paliytest01",
-      storageBucket: "paliytest01.appspot.com",
-      messagingSenderId: "536837451368",
-      appId: "1:536837451368:web:7cedc530df66396e"
-    };
-    // Initialize Firebase
-    console.log(" start Initialize Firebase");
-    firebase.initializeApp(firebaseConfig);
+    importScripts('init.js');
+    // const firebaseConfig = {
+    //   apiKey: "AIzaSyCi5DjGYz2vpQ-SXFjPad1WQZ_TS9DFn44",
+    //   authDomain: "paliytest01.firebaseapp.com",
+    //   databaseURL: "https://paliytest01.firebaseio.com",
+    //   projectId: "paliytest01",
+    //   storageBucket: "paliytest01.appspot.com",
+    //   messagingSenderId: "536837451368",
+    //   appId: "1:536837451368:web:7cedc530df66396e"
+    // };
+    // // Initialize Firebase
+    // firebase.initializeApp(firebaseConfig);
 
     // make auth and firestore references
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const functions = firebase.functions();
   </script>
 
   <script src="js/auth.js"></script>
   <script src="js/main_app.js"></script>
-
 
   <script>
     if ("serviceWorker" in navigator) {
@@ -258,9 +295,7 @@
           });
       }
     }
-
   </script>
-
 </body>
 
 </html>

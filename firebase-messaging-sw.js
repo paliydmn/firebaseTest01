@@ -35,14 +35,14 @@ var precacheFiles = [
 ];
 
 self.addEventListener("install", function (event) {
-  console.log("[PWA Builder] Install Event processing");
+  console.log("Install Event processing");
 
-  console.log("[PWA Builder] Skip waiting on install");
+  console.log("Skip waiting on install");
   self.skipWaiting();
 
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      console.log("[PWA Builder] Caching pages during install");
+      console.log("Caching pages during install");
       return cache.addAll(precacheFiles);
     })
   );
@@ -50,7 +50,7 @@ self.addEventListener("install", function (event) {
 
 // Allow sw to control of current page
 self.addEventListener("activate", function (event) {
-  console.log("[PWA Builder] Claiming clients for current page");
+  console.log("Claiming clients for current page");
   event.waitUntil(self.clients.claim());
 });
 
@@ -62,7 +62,6 @@ self.addEventListener("fetch", function (event) {
     fromCache(event.request).then(
       function (response) {
         // The response was found in the cache so we responde with it and update the entry
-
         // This is where we call the server to get the newest version of the
         // file to use the next time we show view
         event.waitUntil(
@@ -83,7 +82,7 @@ self.addEventListener("fetch", function (event) {
             return response;
           })
           .catch(function (error) {
-            console.log("[PWA Builder] Network request failed and no cache." + error);
+            console.log("Network request failed and no cache." + error);
           });
       }
     )
@@ -106,6 +105,7 @@ function fromCache(request) {
 }
 
 function updateCache(request, response) {
+ // if (event.request.cache === 'only-if-cached') return; 
   return caches.open(CACHE).then(function (cache) {
     return cache.put(request, response);
   });

@@ -1,20 +1,39 @@
+// add admin cloud function
+const adminForm = document.querySelector('.admin-actions');
+adminForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 
+  const adminEmail = document.querySelector('#admin-email').value;
+  const adminResult = document.querySelector('.adminResult');
+  const addAdminRole = functions.httpsCallable('addAdminRole');
+
+  const preloader = document.querySelector('.preloader-wrapper');
+  preloader.classList.add('active');
+  // M.init(preloader).add
+  //preloader.className = 'active small';
+
+  addAdminRole({ email: adminEmail }).then(result => {
+    console.log(result);
+    preloader.classList.remove('active');
+    adminResult.innerHTML = `<p>${result.data.message}<\p>`;
+    M.Modal.init(document.querySelector('#makeAdmin')).open();
+  });
+});
 // listen for auth status changes
 auth.onAuthStateChanged(user => {
   if (user) {
-    console.log('user logged in: ', user);
+    user.getIdTokenResult().then(idTokenResult => {
+      user.admin = idTokenResult.claims.admin;
+      setupUI(user);
+    });
     //get data
     db.collection('guides').onSnapshot(snapshot => {
-      //console.log(snapshot);
-      //console.log(user);
+      console.log(snapshot.docs);
       setupGuides(snapshot.docs);
-      setupUI(user);
-      setupPush(user);
     });
   } else {
     setupGuides([]);
     setupUI();
-    setupPush();
     console.log('user logged out');
   }
 });
@@ -68,8 +87,6 @@ logouts.forEach(logOut => {
     M.Sidenav.getInstance(document.querySelector('#slide-out')).close();
   });
 });
-
-
 
 // login
 const loginForm = document.querySelector('#login-form');

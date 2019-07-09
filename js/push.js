@@ -1,6 +1,6 @@
 //<!-- The core Firebase JS SDK is always required and must be listed first -->
 function setupPush(data) {
-	if (data) {
+	if (data.admin) {
 		const dbRefList = firebase.database().ref("tokens");
 		let str = '<ul class="tList">';
 		function showList() {
@@ -63,53 +63,50 @@ function setupPush(data) {
 
 		//Handle POST. send puches to users
 		var sendBtn = document.getElementById("send");
+		var authKey = '';
+
 		sendBtn.onclick = function () {
 			var selectedArr = Array.prototype.slice.call(document.querySelectorAll('li.selected'));
 			if (Array.isArray(selectedArr) && selectedArr.length) {
-				var title = document.querySelector(".mTitle").value;
-				var body = document.querySelector(".mBody").value;
-				var action = document.querySelector(".mClickAction").value;
+				dbRef = firebase.database().ref("key");
+				dbRef.once('value', snap => {
+					authKey = 'key=' + snap.val();
+					var title = document.querySelector(".mTitle").value;
+					var body = document.querySelector(".mBody").value;
+					var action = document.querySelector(".mClickAction").value;
 
-				selectedArr.forEach(function (to) {
-					if (to.innerHTML == 'Select all') {
-						return;
-					}
-					var authKey = '';
-					dbRef = firebase.database().ref("key");
-					dbRef.once('value', snap => {
-						console.log(snap);
-						authKey = 'key=' + snap.val();
-					});
-					var xhr = new XMLHttpRequest();
-
-					xhr.open('POST', 'https://fcm.googleapis.com/fcm/send', true);
-					xhr.setRequestHeader('Content-type', 'application/json');
-					xhr.setRequestHeader('Authorization', authKey);
-					xhr.onload = function () {
-						// do something to response
-						var result = JSON.parse(this.responseText).success;
-						console.log("Result: " + this.responseText);
-
-						document.getElementById("sent").textContent = ++sentCount;
-
-						var successVal = document.getElementById("success");
-						var failureVal = document.getElementById("failure");
-						if (result) {
-							successCount++;
-							successVal.textContent = successCount;
-						} else {
-							failureCount++;
-							failureVal.textContent = failureCount;
+					selectedArr.forEach(function (to) {
+						if (to.innerHTML == 'Select all') {
+							return;
 						}
-						//console.log();
-					};
-					var mess = '{"to" :"'
-						+ to.innerText + '","notification":{"title":"'
-						+ title + '","body":"'
-						+ body + '","click_action":"'
-						+ action + '","analytics_label": "testLabel"}}'
-					//console.log(mess);
-					xhr.send(mess);
+						var xhr = new XMLHttpRequest();
+						xhr.open('POST', 'https://fcm.googleapis.com/fcm/send', true);
+						xhr.setRequestHeader('Content-type', 'application/json');
+						xhr.setRequestHeader('Authorization', authKey);
+						xhr.onload = function () {
+							// do something to response
+							var result = JSON.parse(this.responseText).success;
+							
+							document.getElementById("sent").textContent = ++sentCount;
+
+							var successVal = document.getElementById("success");
+							var failureVal = document.getElementById("failure");
+							if (result) {
+								successCount++;
+								successVal.textContent = successCount;
+							} else {
+								failureCount++;
+								failureVal.textContent = failureCount;
+							}
+						};
+						var mess = '{"to" :"'
+							+ to.innerText + '","notification":{"title":"'
+							+ title + '","body":"'
+							+ body + '","click_action":"'
+							+ action + '","analytics_label": "testLabel"}}'
+						//console.log(mess);
+						xhr.send(mess);
+					});
 				});
 			} else {
 				alert("Select at least one tocken");
