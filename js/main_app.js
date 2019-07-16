@@ -81,9 +81,30 @@ function subscribe() {
     });
   }).catch(function (err) {
     console.log(err);
+    isNotifAllowed();
   });
 }
-subscribe();
+
+var subscribeBtn = document.querySelector('.subscribe');
+
+subscribeBtn.onclick = function(){
+  console.log("Subscribe clicked");
+  subscribe();
+  isNotifAllowed();
+};
+function isNotifAllowed(){
+  var permission = Notification.permission;
+  if(permission === "default"){
+    subscribeBtn.style.display = 'inline';
+  } else{
+    subscribeBtn.style.display = 'none';
+  }
+}
+isNotifAllowed();
+
+
+
+
 /*
 function uuidv4() {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>

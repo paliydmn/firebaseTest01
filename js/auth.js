@@ -13,7 +13,7 @@ adminForm.addEventListener('submit', (e) => {
   //preloader.className = 'active small';
 
   addAdminRole({ email: adminEmail }).then(result => {
-    console.log(result);
+   // console.log(result);
     preloader.classList.remove('active');
     adminResult.innerHTML = `<p>${result.data.message}<\p>`;
     M.Modal.init(document.querySelector('#makeAdmin')).open();
@@ -28,7 +28,7 @@ auth.onAuthStateChanged(user => {
     });
     //get data
     db.collection('guides').onSnapshot(snapshot => {
-      console.log(snapshot.docs);
+     // console.log(snapshot.docs);
       setupGuides(snapshot.docs);
     });
   } else {

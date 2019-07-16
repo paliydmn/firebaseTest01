@@ -27,6 +27,7 @@ var CACHE = 'my-site-cache-v1';
 var precacheFiles = [
   '/',
   '/index.html',
+  '/offline.html',
   '/css/push.css',
   '/js/main_app.js',
   '/js/push.js',
@@ -101,6 +102,9 @@ function fromCache(request) {
 
       return matching;
     });
+  })
+  .catch(err => {
+    return caches.match('offline.html');
   });
 }
 

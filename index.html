@@ -24,11 +24,42 @@
     i.material-icons {
       margin-top: 50%;
     }
+    .subscribe {
+      width: 35px; 
+      height: 35px; 
+      margin-top: 10px; 
+      display: none;
+    }
+    .subscribe:hover {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
   </style>
   <title>Paliydmn</title>
 </head>
 
 <body>
+ 
   <!-- NAVBAR -->
   <nav class="z-depth-0 grey lighten-4">
     <div class="nav-wrapper container">
@@ -37,12 +68,12 @@
       </a>
       <a href="#" data-target="slide-out" class="sidenav-trigger">
         <i class="material-icons">
-          <!-- <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">
-       -->
           <div id="menuIcon"></div>
           <div id="menuIcon"></div>
           <div id="menuIcon"></div>
-        </i></a>
+        </i>
+      </a>
+        <img class="subscribe" title="Subscribe" src="image/alarm.png">
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li class="logged-in" style="display: none;">
           <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
@@ -208,7 +239,7 @@
             <div class="row">
               <div class="input-field col s12">
                 <textarea id="textarea2" class="materialize-textarea mClickAction" data-length="120"
-                  value="received.html"></textarea>
+                  value="received.html">index.html</textarea>
                 <label for="textarea2">Click Action</label>
               </div>
             </div>
@@ -241,6 +272,7 @@
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-functions.js"></script>
+  <script src="js/init.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
@@ -258,7 +290,6 @@
   </script>
   <script>
     //Firebase init
-    importScripts('init.js');
     // const firebaseConfig = {
     //   apiKey: "AIzaSyCi5DjGYz2vpQ-SXFjPad1WQZ_TS9DFn44",
     //   authDomain: "paliytest01.firebaseapp.com",
