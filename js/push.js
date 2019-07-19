@@ -62,7 +62,7 @@ function setupPush(data) {
 		
 					});
 				  });
-				//Delete token from database
+				//Delete token from database #ToDo refactoring
 				  function deleteToken(item){
 					var target = 'tokens/'+item.substring(0, 4) + item.substring(item.length -5, item.length);
 					firebase.database().ref(target).remove()
