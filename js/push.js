@@ -13,10 +13,10 @@ function setupPush(data) {
 			dbRefList.once('value', snap => {
 				var snapResult = Object.values(snap.val());
 				if (snapResult.length > 1) {
-					str += '<li class="li selectAll">Select all</li>';
+					str += '<li class="li selectAll"><div class="deleteTok" style="display: none;"></div>Select all</li>';
 				}
 				snapResult.forEach(val => {
-					str += '<li class="li">' + val + '</li>';
+					str += '<li class="li"><div class="deleteTok" style="display: none;"></div>' + val + '</li>';
 				});
 				showList();
 				//--------------------------------------------
@@ -24,8 +24,56 @@ function setupPush(data) {
 				const iterable = Array.prototype.slice.call(list);
 				var i = 0;
 				iterable.forEach(function (item) {
-					item.id = "l" + i++;
+					var id = i++;
+					item.id = '_'+id;
+					if(id !== 0){
+						item.children[0].id = '_' + id; 
+					}
 				});
+				//DELETE TIKENS FROM DB
+				var deleteList = document.querySelectorAll('.deleteTok');
+				[].forEach.call(deleteList, function(tok) {
+					// do whatever
+					tok.addEventListener('click', function (e) {
+						console.log(e.target.parentNode.innerText);
+						//const dbRefList = firebase.database().ref('tokens/cgOsRW0e6').remove();
+						//dbRefList.ref(''); = token.substring(0, 4) + token.substring(token.length - 5, token.length);
+						M.Modal.init(document.querySelector('#delNotif')).open(); 
+						
+						document.querySelector('#agree').onclick = function(){
+							console.log('click agree');
+							var item = e.target.parentNode.innerText;
+							if (item === "Select all"){
+								//ToDo remove all 
+								var selectedArr = Array.prototype.slice.call(document.querySelectorAll('li.selected'));
+								selectedArr.forEach(item =>{
+									if (item.innerText === "Select all"){return;}
+									console.log("remove all! " +item.innerText);	
+									deleteToken(item.innerText);						
+								});
+								return;
+							}
+							deleteToken(item);
+						};
+					
+						document.querySelector('#disagree').onclick = function(){
+							console.log('click disagree');
+						};
+		
+					});
+				  });
+				//Delete token from database
+				  function deleteToken(item){
+					var target = 'tokens/'+item.substring(0, 4) + item.substring(item.length -5, item.length);
+					firebase.database().ref(target).remove()
+					.then( () => { 
+						console.log('Success!');
+						e.target.parentNode.remove();
+					})
+					.catch(err => {
+						console.log(err.message);	
+					});
+				  }
 				// SELECT DESELECT SELECT-ALL 
 				document.querySelector('.tList').addEventListener('click', function (e) {
 					if (e.target.tagName === 'LI') {
@@ -34,20 +82,27 @@ function setupPush(data) {
 						if (id.className == 'li selectAll') {
 							iterable.forEach(function (item) {
 								item.className = 'li selected';
+								item.children[0].style.display = 'block';
+								id.children[0].style.display = 'block';
 							});
 							id.className = 'li selectAll selected';
 						} else {
 							if (id.className == 'li selectAll selected') {
 								iterable.forEach(function (item) {
-									if (item.className != 'selectAll')
+									if (item.className != 'selectAll'){
 										item.className = 'li';
+										id.children[0].style.display = 'none';
+										item.children[0].style.display = 'none';
+									}
 								});
 								id.className = 'li selectAll';
 							} else {
 								if (id.className == 'li selected') {
 									id.className = 'li';
+									id.children[0].style.display = 'none';
 								} else {
 									e.target.className = 'li selected';
+									id.children[0].style.display = 'block';
 								}
 							}
 						}
@@ -60,6 +115,9 @@ function setupPush(data) {
 		let successCount = 0;
 		let failureCount = 0;
 
+		function deleteTok(){
+
+		}
 
 		//Handle POST. send puches to users
 		var sendBtn = document.getElementById("send");

@@ -76,6 +76,7 @@ function subscribe() {
     msg.getToken().then(function (token) {
       //console.log(token);
       sendTokenToServer(token);
+      isNotifAllowed();
     }).catch(function (err) {
       console.log("Can't get a tocken!");
     });

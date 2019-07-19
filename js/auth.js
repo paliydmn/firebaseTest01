@@ -105,10 +105,12 @@ loginForm.addEventListener('submit', (e) => {
 
     M.Modal.getInstance(modal).close();
     loginForm.reset();
-
     //close side nav bar after successfull action
     M.Sidenav.getInstance(document.querySelector('#slide-out')).close();
+    loginForm.querySelector('.error').innerHTML = '';
 
+  }).catch(err => {
+    loginForm.querySelector('.error').innerHTML = err.message;
   });
 
 });
