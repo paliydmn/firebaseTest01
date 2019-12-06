@@ -23,7 +23,8 @@ messaging.setBackgroundMessageHandler(function (payload) {
 // [END background_handler]
 //CACHE 
 // This is the service worker with the Cache-first network
-var CACHE = 'my-site-cache-v1';
+var CACHE = 'site-cache-v1';
+var CACHE_DYNAMIC = 'dynamic-cache-v1';
 var precacheFiles = [
   '/',
   '/index.html',
@@ -55,62 +56,25 @@ self.addEventListener("activate", function (event) {
   event.waitUntil(self.clients.claim());
 });
 
-// If any fetch fails, it will look for the request in the cache and serve it from there first
-self.addEventListener("fetch", function (event) {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    fromCache(event.request).then(
-      function (response) {
-        // The response was found in the cache so we responde with it and update the entry
-        // This is where we call the server to get the newest version of the
-        // file to use the next time we show view
-        event.waitUntil(
-          fetch(event.request).then(function (response) {
-            return updateCache(event.request, response);
-          })
-        );
-
-        return response;
-      },
-      function () {
-        // The response was not found in the cache so we look for it on the server
-        return fetch(event.request)
-          .then(function (response) {
-            // If request was success, add or update it in the cache
-            event.waitUntil(updateCache(event.request, response.clone()));
-
-            return response;
-          })
-          .catch(function (error) {
-            console.log("Network request failed and no cache." + error);
-          });
-      }
-    )
+// fetch from network and put to Cache 
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(cacheRes => {
+      return fetch(evt.request).then(fetchRes => {
+        return caches.open(CACHE_DYNAMIC).then(cache => {
+          if (fetchRes.type == 'basic') {
+            cache.put(evt.request.url, fetchRes.clone());
+          }
+          return fetchRes;
+        });
+      }).catch((err) => {
+        if (cacheRes)
+          return cacheRes;
+        else
+          return caches.match('/offline.html');
+      });
+    }).catch(() => {
+      return cacheRes;
+    })
   );
 });
-
-function fromCache(request) {
-  // Check to see if you have it in the cache
-  // Return response
-  // If not in the cache, then return
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(request).then(function (matching) {
-      if (!matching || matching.status === 404) {
-        return Promise.reject("no-match");
-      }
-
-      return matching;
-    });
-  })
-  .catch(err => {
-    return caches.match('offline.html');
-  });
-}
-
-function updateCache(request, response) {
- // if (event.request.cache === 'only-if-cached') return; 
-  return caches.open(CACHE).then(function (cache) {
-    return cache.put(request, response);
-  });
-}
